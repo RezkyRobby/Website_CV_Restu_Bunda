@@ -1,0 +1,12 @@
+// Skema Prisma — Website CV Restu Bunda Mariyati
+// Blueprint lengkap semua model dan enum menyusul di Task 3 (PRD §7).
+// Task ini hanya menyiapkan fondasi datasource + generator + output client.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}

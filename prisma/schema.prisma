@@ -1,6 +1,10 @@
 // Skema Prisma — Website CV Restu Bunda Mariyati
-// Blueprint lengkap semua model dan enum menyusul di Task 3 (PRD §7).
-// Task ini hanya menyiapkan fondasi datasource + generator + output client.
+// Blueprint sumber kebenaran: PRD.md §7. Istilah domain mengikuti CONTEXT.md.
+//
+// Catatan Prisma 7:
+// - URL koneksi dikonfigurasi di prisma.config.ts (datasource.url), bukan di sini.
+// - PrismaClient digenerate ke src/generated/prisma dan wajib driver adapter
+//   (lihat src/lib/prisma.ts).
 
 generator client {
   provider = "prisma-client"
@@ -9,4 +13,378 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+// ============================================================
+// Enum
+// ============================================================
+
+/// Role pengguna portal. Akun CLIENT dibuat oleh CS saat deal (tanpa self-register).
+enum UserRole {
+  CLIENT
+  CS
+  SUPER_ADMIN
+}
+
+/// Kategori layanan pekerja rumah tangga.
+enum WorkerCategory {
+  BABY_SITTER
+  ART
+  PERAWAT_LANSIA
+  SUPIR
+}
+
+/// Siklus status pekerja. Kandidat katalog publik = STANDBY.
+enum WorkerStatus {
+  STANDBY
+  INTERVIEW
+  PLACED
+  ON_LEAVE
+  BLACKLIST
+}
+
+enum Religion {
+  ISLAM
+  KRISTEN
+  KATOLIK
+  HINDU
+  BUDDHA
+  KONGHUCU
+}
+
+enum MaritalStatus {
+  BELUM_MENIKAH
+  MENIKAH
+  CERAI_HIDUP
+  CERAI_MATI
+}
+
+/// Siklus status kontrak; transisi ACTIVE → EXPIRING_SOON → COMPLETED dikelola Daily Automation Job.
+enum ContractStatus {
+  ACTIVE
+  EXPIRING_SOON
+  COMPLETED
+  TERMINATED
+}
+
+/// Tiket klaim garansi; maks satu klaim aktif per kontrak.
+enum WarrantyClaimStatus {
+  PENDING
+  IN_REVIEW
+  CANDIDATES_OFFERED
+  RESOLVED
+  REJECTED
+}
+
+enum ReplacementOfferStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+/// Invoice lahir DRAFT saat SPK dirilis; konfirmasi PAID hanya Super Admin.
+enum PaymentType {
+  PLACEMENT_FEE
+  REPLACEMENT_FEE
+}
+
+enum PaymentStatus {
+  DRAFT
+  PAID
+}
+
+/// Pemonitor eksekusi harian Daily Automation Job.
+enum JobRunStatus {
+  RUNNING
+  SUCCESS
+  FAILED
+}
+
+// ============================================================
+// Users & Auth (PRD §7.1)
+// ============================================================
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  role      UserRole @default(CLIENT)
+  phone     String?  @unique
+  address   String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  contractsAsClient Contract[]         @relation("ContractClient")
+  claimsAsClient    WarrantyClaim[]    @relation("ClaimClient")
+  activityLogs      ActivityLog[]
+  evaluations       WorkerEvaluation[]
+  paymentsConfirmed Payment[]          @relation("PaymentConfirmedBy")
+
+  @@map("users")
+}
+
+// Tabel standar bawaan Better-Auth (Session, Account, Verification) —
+// ditambahkan pada Task 5 agar tidak mendiversikan skema dua kali.
+
+// ============================================================
+// Pekerja & Riwayat (PRD §7.2)
+// ============================================================
+
+model Worker {
+  id                   String         @id @default(cuid())
+  nik                  String         @unique
+  noKk                 String?        @map("no_kk")
+  fullName             String         @map("full_name")
+  nickname             String
+  birthDate            DateTime       @map("birth_date")
+  religion             Religion
+  maritalStatus        MaritalStatus  @map("marital_status")
+  ethnicity            String
+  domicileAddress      String         @map("domicile_address")
+  category             WorkerCategory
+  status               WorkerStatus   @default(STANDBY)
+  stayIn               Boolean
+  expectedSalary       Decimal        @default(0) @map("expected_salary") @db.Decimal(12, 2)
+  petTolerance         Boolean        @default(false) @map("pet_tolerance")
+  willingOutOfCity     Boolean        @default(false) @map("willing_out_of_city")
+  photoProfileUrl      String         @map("photo_profile_url")
+  ktpDocumentUrl       String         @map("ktp_document_url")
+  mcuReportUrl         String?        @map("mcu_report_url")
+  skckVerified         Boolean        @default(false) @map("skck_verified")
+  skckDocumentUrl      String?        @map("skck_document_url")
+  trainingCertificates Json?          @map("training_certificates")
+  guarantorName        String         @map("guarantor_name")
+  guarantorPhone       String         @map("guarantor_phone")
+  guarantorRelation    String?        @map("guarantor_relation")
+  dataConsentAt        DateTime?      @map("data_consent_at")
+  createdAt            DateTime       @default(now()) @map("created_at")
+  deletedAt            DateTime?      @map("deleted_at")
+
+  skills            WorkerSkill[]
+  experiences       WorkerExperience[]
+  contracts         Contract[]
+  replacementOffers ReplacementOffer[]
+
+  @@index([status, category])
+  @@map("workers")
+}
+
+model Skill {
+  id       String  @id @default(cuid())
+  name     String  @unique
+  isActive Boolean @default(true)
+
+  workers WorkerSkill[]
+
+  @@map("skills")
+}
+
+model WorkerSkill {
+  workerId String @map("worker_id")
+  skillId  String @map("skill_id")
+
+  worker Worker @relation(fields: [workerId], references: [id], onDelete: Cascade)
+  skill  Skill  @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([workerId, skillId])
+  @@map("worker_skills")
+}
+
+model WorkerExperience {
+  id               String    @id @default(cuid())
+  workerId         String    @map("worker_id")
+  employerLocation String    @map("employer_location")
+  position         String
+  startDate        DateTime  @map("start_date")
+  endDate          DateTime? @map("end_date")
+  reasonForLeaving String    @map("reason_for_leaving")
+  createdAt        DateTime  @default(now()) @map("created_at")
+
+  worker Worker @relation(fields: [workerId], references: [id], onDelete: Cascade)
+
+  @@index([workerId])
+  @@map("worker_experiences")
+}
+
+// ============================================================
+// Kontrak & Garansi (PRD §7.3)
+// ============================================================
+
+model Contract {
+  id                    String         @id @default(cuid())
+  contractNumber        String         @unique @map("contract_number")
+  clientId              String         @map("client_id")
+  workerId              String         @map("worker_id")
+  startDate             DateTime       @map("start_date")
+  endDate               DateTime       @map("end_date")
+  status                ContractStatus @default(ACTIVE)
+  agreedSalary          Decimal        @map("agreed_salary") @db.Decimal(12, 2)
+  warrantyDays          Int            @default(90) @map("warranty_days")
+  maxReplacements       Int            @default(2) @map("max_replacements")
+  replacementsUsed      Int            @default(0) @map("replacements_used")
+  spkDocumentUrl        String?        @map("spk_document_url")
+  spkStampedUrl         String?        @map("spk_stamped_url")
+  isH30Notified         Boolean        @default(false) @map("is_h30_notified")
+  isH14Notified         Boolean        @default(false) @map("is_h14_notified")
+  isH7Notified          Boolean        @default(false) @map("is_h7_notified")
+  renewedFromContractId String?        @map("renewed_from_contract_id")
+  createdAt             DateTime       @default(now()) @map("created_at")
+
+  client      User       @relation("ContractClient", fields: [clientId], references: [id])
+  worker      Worker     @relation(fields: [workerId], references: [id])
+  renewedFrom Contract?  @relation("ContractRenewal", fields: [renewedFromContractId], references: [id])
+  renewals    Contract[] @relation("ContractRenewal")
+
+  salaryLogs  SalaryLog[]
+  claims      WarrantyClaim[]
+  evaluations WorkerEvaluation[]
+  payments    Payment[]
+
+  @@index([status, endDate])
+  @@index([clientId])
+  @@index([workerId])
+  @@map("contracts")
+}
+
+model WarrantyClaim {
+  id                  String              @id @default(cuid())
+  claimNumber         String              @unique @map("claim_number")
+  contractId          String              @map("contract_id")
+  clientId            String              @map("client_id")
+  reason              String
+  detailedComplaint   String              @map("detailed_complaint")
+  replacementCriteria Json                @map("replacement_criteria")
+  status              WarrantyClaimStatus @default(PENDING)
+  createdAt           DateTime            @default(now()) @map("created_at")
+
+  contract Contract           @relation(fields: [contractId], references: [id])
+  client   User               @relation("ClaimClient", fields: [clientId], references: [id])
+  offers   ReplacementOffer[]
+
+  @@index([contractId, status])
+  @@map("warranty_claims")
+}
+
+model ReplacementOffer {
+  id        String                 @id @default(cuid())
+  claimId   String                 @map("claim_id")
+  workerId  String                 @map("worker_id")
+  status    ReplacementOfferStatus @default(PENDING)
+  createdAt DateTime               @default(now()) @map("created_at")
+
+  claim  WarrantyClaim @relation(fields: [claimId], references: [id])
+  worker Worker        @relation(fields: [workerId], references: [id])
+
+  @@unique([claimId, workerId])
+  @@index([claimId, status])
+  @@map("replacement_offers")
+}
+
+// ============================================================
+// Log & Audit (PRD §7.4)
+// ============================================================
+
+model SalaryLog {
+  id          String   @id @default(cuid())
+  contractId  String   @map("contract_id")
+  paymentDate DateTime @map("payment_date")
+  amount      Decimal  @db.Decimal(12, 2)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  contract Contract @relation(fields: [contractId], references: [id])
+
+  @@index([contractId])
+  @@map("salary_logs")
+}
+
+model ActivityLog {
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
+  userRole   UserRole @map("user_role")
+  action     String
+  entityType String   @map("entity_type")
+  entityId   String   @map("entity_id")
+  details    Json
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([createdAt])
+  @@index([entityType, entityId])
+  @@map("activity_logs")
+}
+
+// ============================================================
+// Evaluasi, Keuangan & Testimoni (PRD §7.5)
+// ============================================================
+
+model WorkerEvaluation {
+  id                String   @id @default(cuid())
+  contractId        String   @map("contract_id")
+  clientId          String   @map("client_id")
+  workerId          String   @map("worker_id")
+  periodMonth       DateTime @map("period_month")
+  ratingDiscipline  Int      @map("rating_discipline")
+  ratingCleanliness Int      @map("rating_cleanliness")
+  ratingAttitude    Int      @map("rating_attitude")
+  comment           String?
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  contract Contract @relation(fields: [contractId], references: [id])
+  client   User     @relation(fields: [clientId], references: [id])
+
+  @@unique([contractId, periodMonth])
+  @@map("worker_evaluations")
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  invoiceNumber String        @unique @map("invoice_number")
+  contractId    String        @map("contract_id")
+  amount        Decimal       @db.Decimal(12, 2)
+  type          PaymentType
+  status        PaymentStatus @default(DRAFT)
+  paymentDate   DateTime?     @map("payment_date")
+  method        String?
+  receiptUrl    String?       @map("receipt_url")
+  confirmedById String?       @map("confirmed_by_id")
+  createdAt     DateTime      @default(now()) @map("created_at")
+
+  contract    Contract @relation(fields: [contractId], references: [id])
+  confirmedBy User?    @relation("PaymentConfirmedBy", fields: [confirmedById], references: [id])
+
+  @@index([contractId])
+  @@map("payments")
+}
+
+model Testimonial {
+  id           String   @id @default(cuid())
+  clientName   String   @map("client_name")
+  clientOrigin String   @map("client_origin")
+  photoUrl     String?  @map("photo_url")
+  rating       Int
+  content      String
+  isPublished  Boolean  @default(false) @map("is_published")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([isPublished])
+  @@map("testimonials")
+}
+
+// ============================================================
+// Job Run (PRD §7.7)
+// ============================================================
+
+model JobRun {
+  id           String       @id @default(cuid())
+  jobKey       String       @map("job_key")
+  startedAt    DateTime     @map("started_at")
+  finishedAt   DateTime?    @map("finished_at")
+  status       JobRunStatus @default(RUNNING)
+  durationMs   Int?         @map("duration_ms")
+  errorMessage String?      @map("error_message")
+  createdAt    DateTime     @default(now()) @map("created_at")
+
+  @@index([jobKey, startedAt])
+  @@map("job_runs")
 }

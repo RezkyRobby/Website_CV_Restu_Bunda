@@ -14,8 +14,8 @@ export default defineConfig({
     seed: "npx tsx prisma/seed.ts",
   },
   datasource: {
-    // Dipakai Prisma CLI (migrate, db, studio). Boleh kosong saat database
-    // belum disiapkan — perintah yang butuh koneksi akan gagal jelas.
-    url: process.env.DATABASE_URL ?? "",
+    // Dipakai Prisma CLI (migrate, db, studio). Untuk Neon, migrasi wajib
+    // lewat koneksi langsung (DIRECT_URL, tanpa PgBouncer) — bukan pooler.
+    url: process.env.DIRECT_URL ?? process.env.DATABASE_URL ?? "",
   },
 });

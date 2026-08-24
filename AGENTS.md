@@ -159,7 +159,7 @@ X Task X gagal — [nama task]
 Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 
 ### Fase 1 — Foundation & Public (Hari 1–5)
-- [ ] 1. Inisialisasi proyek Next.js 16 App Router + React 19 + TypeScript strict + Tailwind CSS 4 + ESLint, ikuti Struktur Direktori
+- [x] 1. Inisialisasi proyek Next.js 16 App Router + React 19 + TypeScript strict + Tailwind CSS 4 + ESLint, ikuti Struktur Direktori
 - [ ] 2. Setup PostgreSQL (Supabase/Neon), Prisma 7, `.env.example` lengkap sesuai Lampiran C
 - [ ] 3. Tulis skema Prisma lengkap PRD §7 (semua model dan enum)
 - [ ] 4. Migrasi awal + service penomoran dokumen `{PREFIX}/{YYYY}/{NNNN}` transaksional (counter + lock)

@@ -163,7 +163,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 - [x] 2. Setup PostgreSQL (Supabase/Neon), Prisma 7, `.env.example` lengkap sesuai Lampiran C
 - [x] 3. Tulis skema Prisma lengkap PRD §7 (semua model dan enum)
 - [x] 4. Migrasi awal + service penomoran dokumen `{PREFIX}/{YYYY}/{NNNN}` transaksional (counter + lock)
-- [ ] 5. Setup Better-Auth 3 role (CLIENT, CS, SUPER_ADMIN) + middleware proteksi rute per role
+- [x] 5. Setup Better-Auth 3 role (CLIENT, CS, SUPER_ADMIN) + middleware proteksi rute per role
 - [ ] 6. Seeder idempoten Super Admin via API Better-Auth + seed 12 skill Lampiran B
 - [ ] 7. Integrasi Cloudinary (upload, validasi tipe/ukuran, signed delivery URL + overlay watermark) dan Nodemailer Gmail SMTP
 - [ ] 8. Motion foundation (`MotionConfig` + `LazyMotion` + token fast/base/slow) dan kamus label enum terpusat di `src/messages/`

@@ -7,6 +7,8 @@
 // ALLOW_SIGNUP diaktifkan sebelum auth di-load secara dinamis (import statis
 // di-hoist lebih dulu oleh ESM, sehingga env harus diset sebelum `await import`).
 
+import "dotenv/config";
+
 process.env.ALLOW_SIGNUP = "true";
 
 import { prisma } from "../src/lib/prisma";

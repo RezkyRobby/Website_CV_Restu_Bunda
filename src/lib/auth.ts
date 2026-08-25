@@ -13,11 +13,12 @@ export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET,
   database: prismaAdapter(prisma, { provider: "postgresql" }),
 
-  // Autentikasi email/password. Sign-up publik dinonaktifkan:
+  // Autentikasi email/password. Sign-up publik dinonaktifkan secara default:
   // akun CLIENT hanya dibuat oleh CS (via API), CS/SUPER_ADMIN via seeder.
+  // Seeder bootstrap mengaktifkan sementara dengan env ALLOW_SIGNUP=true.
   emailAndPassword: {
     enabled: true,
-    disableSignUp: true,
+    disableSignUp: process.env.ALLOW_SIGNUP !== "true",
     minPasswordLength: 8,
     maxPasswordLength: 128,
   },

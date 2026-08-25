@@ -10,7 +10,6 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionCookie } from "better-auth/cookies";
-import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { UserRole, isAdminRole, type UserRoleKey } from "@/lib/roles";
 
@@ -23,8 +22,9 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  // Validasi sesi penuh + role (database-backed).
-  const session = await auth.api.getSession({ headers: await headers() });
+  // Validasi sesi penuh + role (database-backed). Di proxy tidak ada
+  // next/headers — pakai headers dari request yang masuk.
+  const session = await auth.api.getSession({ headers: request.headers });
   if (!session) {
     return NextResponse.redirect(new URL("/", request.url));
   }

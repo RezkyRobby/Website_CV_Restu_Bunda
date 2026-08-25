@@ -388,3 +388,28 @@ model JobRun {
   @@index([jobKey, startedAt])
   @@map("job_runs")
 }
+
+// ============================================================
+// Penomoran Dokumen (PRD §7.6) — counter + lock transaksional
+// ============================================================
+
+/// Menyimpan sequence penomoran dokumen per prefix per tahun.
+/// Lock via `SELECT ... FOR UPDATE` di dalam transaksi agar aman dari
+/// race condition saat dua CS merilis dokumen bersamaan.
+model DocumentSequence {
+  id        String @id @default(cuid())
+  prefix    String @map("prefix")   // "SPK" | "CLM" | "INV"
+  year      Int                     // Tahun kalender (zona Asia/Jakarta)
+  lastValue Int    @default(0) @map("last_value") // Counter terakhir terpakai
+
+  @@unique([prefix, year])
+  @@map("document_sequences")
+}
+
+/// Enum label prefix penomoran dokumen.
+/// Nilai dipetakan di service `generateDocumentNumber` (src/server/doc-numbering.ts).
+enum DocumentPrefix {
+  SPK
+  CLM
+  INV
+}

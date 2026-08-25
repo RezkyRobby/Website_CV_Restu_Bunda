@@ -165,7 +165,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 - [x] 4. Migrasi awal + service penomoran dokumen `{PREFIX}/{YYYY}/{NNNN}` transaksional (counter + lock)
 - [x] 5. Setup Better-Auth 3 role (CLIENT, CS, SUPER_ADMIN) + middleware proteksi rute per role
 - [x] 6. Seeder idempoten Super Admin via API Better-Auth + seed 12 skill Lampiran B
-- [ ] 7. Integrasi Cloudinary (upload, validasi tipe/ukuran, signed delivery URL + overlay watermark) dan Nodemailer Gmail SMTP
+- [x] 7. Integrasi Cloudinary (upload, validasi tipe/ukuran, signed delivery URL + overlay watermark) dan Nodemailer Gmail SMTP
 - [ ] 8. Motion foundation (`MotionConfig` + `LazyMotion` + token fast/base/slow) dan kamus label enum terpusat di `src/messages/`
 - [ ] 9. Landing page: hero, statistik real-time dengan fallback, slider testimoni `isPublished` (menunggu `DESIGN.md` tersedia)
 - [ ] 10. Katalog publik tersanitasi + filter (kategori, toleransi hewan, kesediaan luar kota) + CTA WhatsApp booking

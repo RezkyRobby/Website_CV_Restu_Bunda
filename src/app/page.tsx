@@ -1,5 +1,5 @@
 import { Navbar } from "@/components/landing/navbar";
-import { Hero } from "@/components/landing/hero";
+import { HeroClient } from "@/components/landing/hero.client";
 import { StatsStrip } from "@/components/landing/stats-strip";
 import { Services } from "@/components/landing/services";
 import { HowItWorks } from "@/components/landing/how-it-works";
@@ -21,7 +21,7 @@ export default async function Home() {
   return (
     <main className="min-h-screen bg-[#F8E7C9]">
       <Navbar />
-      <Hero />
+      <HeroClient />
       <StatsStrip stats={stats} />
       <Services />
       <HowItWorks />

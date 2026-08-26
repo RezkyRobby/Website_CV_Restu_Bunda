@@ -1,3 +1,7 @@
+"use client";
+
+import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
+
 /**
  * Cara kerja / Prosedur penempatan — 4 langkah bernomor Emerald (DESIGN.md §11)
  */
@@ -29,16 +33,18 @@ export function HowItWorks() {
   return (
     <section id="cara-kerja" className="bg-white">
       <div className="mx-auto max-w-[1200px] px-4 py-12 sm:px-6 lg:py-16">
-        <p className="text-xs font-semibold uppercase tracking-widest text-[#064E3B]">
-          Cara Kerja
-        </p>
-        <h2 className="mt-2 max-w-2xl text-[28px] font-semibold leading-tight text-[#26221B] sm:text-[32px]">
-          Empat langkah jelas dari konsultasi hingga penempatan.
-        </h2>
+        <Reveal>
+          <p className="text-xs font-semibold uppercase tracking-widest text-[#064E3B]">
+            Cara Kerja
+          </p>
+          <h2 className="mt-2 max-w-2xl text-[28px] font-semibold leading-tight text-[#26221B] sm:text-[32px]">
+            Empat langkah jelas dari konsultasi hingga penempatan.
+          </h2>
+        </Reveal>
 
-        <ol className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Stagger className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {STEPS.map((s) => (
-            <li
+            <StaggerItem
               key={s.n}
               className="rounded-[var(--radius-card)] border border-[#E3D5BC] bg-[#F8E7C9]/40 p-6"
             >
@@ -47,9 +53,9 @@ export function HowItWorks() {
               </p>
               <h3 className="mt-2 text-[16px] font-semibold text-[#26221B]">{s.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-[#6F675A]">{s.desc}</p>
-            </li>
+            </StaggerItem>
           ))}
-        </ol>
+        </Stagger>
       </div>
     </section>
   );

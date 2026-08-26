@@ -1,3 +1,7 @@
+"use client";
+
+import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
+
 /**
  * Keamanan & Verifikasi — kartu ikon (DESIGN.md §11)
  */
@@ -24,18 +28,18 @@ const ITEMS = [
 export function Verification() {
   return (
     <section id="keamanan" className="mx-auto max-w-[1200px] px-4 py-12 sm:px-6 lg:py-16">
-      <div className="max-w-2xl">
+      <Reveal>
         <p className="text-xs font-semibold uppercase tracking-widest text-[#064E3B]">
           Keamanan & Verifikasi
         </p>
         <h2 className="mt-2 text-[28px] font-semibold leading-tight text-[#26221B] sm:text-[32px]">
           Kepercayaan dibangun di atas dokumen yang sah.
         </h2>
-      </div>
+      </Reveal>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2">
+      <Stagger className="mt-8 grid gap-4 sm:grid-cols-2">
         {ITEMS.map((item) => (
-          <div
+          <StaggerItem
             key={item.title}
             className="flex gap-4 rounded-[var(--radius-card)] border border-[#E3D5BC] bg-white p-6"
           >
@@ -46,9 +50,9 @@ export function Verification() {
               <h3 className="text-[16px] font-semibold text-[#26221B]">{item.title}</h3>
               <p className="mt-1 text-sm leading-relaxed text-[#6F675A]">{item.desc}</p>
             </div>
-          </div>
+          </StaggerItem>
         ))}
-      </div>
+      </Stagger>
     </section>
   );
 }

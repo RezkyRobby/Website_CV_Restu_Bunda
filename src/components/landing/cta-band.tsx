@@ -1,15 +1,18 @@
+"use client";
+
+import { Reveal } from "@/components/motion/reveal";
 import { LinkButton } from "@/components/ui/button";
 
 /**
  * Band CTA akhir & Footer — DESIGN.md §5.10
  * Band penuh Emerald Ink: headline putih, tombol inversi (fill putih, teks Emerald).
- * Footer di band yang sama.
+ * Footer di band yang sama. Reveal on scroll (PRD §6.1).
  */
 export function CtaBand() {
   return (
     <section className="bg-[#064E3B]">
       <div className="mx-auto max-w-[1200px] px-4 py-14 sm:px-6 lg:py-20">
-        <div className="mx-auto max-w-3xl text-center">
+        <Reveal className="mx-auto max-w-3xl text-center">
           <h2 className="text-[28px] font-semibold leading-tight text-white sm:text-[36px]">
             Siap menemukan tenaga yang tepat untuk rumah Anda?
           </h2>
@@ -36,7 +39,7 @@ export function CtaBand() {
               Lihat Kandidat
             </LinkButton>
           </div>
-        </div>
+        </Reveal>
 
         {/* Footer di band yang sama */}
         <footer className="mt-14 border-t border-white/15 pt-8">

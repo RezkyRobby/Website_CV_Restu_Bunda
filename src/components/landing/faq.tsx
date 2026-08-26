@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Reveal } from "@/components/motion/reveal";
 
 type FaqItem = {
   q: string;
@@ -39,12 +40,14 @@ export function Faq() {
 
   return (
     <section id="faq" className="mx-auto max-w-[1200px] px-4 py-12 sm:px-6 lg:py-16">
-      <p className="text-xs font-semibold uppercase tracking-widest text-[#064E3B]">
-        Pertanyaan Umum
-      </p>
-      <h2 className="mt-2 text-[28px] font-semibold leading-tight text-[#26221B] sm:text-[32px]">
-        Jawaban untuk hal yang paling sering ditanyakan.
-      </h2>
+      <Reveal>
+        <p className="text-xs font-semibold uppercase tracking-widest text-[#064E3B]">
+          Pertanyaan Umum
+        </p>
+        <h2 className="mt-2 text-[28px] font-semibold leading-tight text-[#26221B] sm:text-[32px]">
+          Jawaban untuk hal yang paling sering ditanyakan.
+        </h2>
+      </Reveal>
 
       <div className="mt-8 divide-y divide-[#E3D5BC] border-y border-[#E3D5BC]">
         {FAQS.map((item, idx) => {

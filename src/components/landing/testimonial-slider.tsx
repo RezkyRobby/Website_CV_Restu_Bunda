@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AnimatePresence, m } from "motion/react";
 import type { PublishedTestimonial } from "@/server/landing-stats";
 
 type Props = {
@@ -64,8 +65,14 @@ export function TestimonialSlider({ testimonials }: Props) {
 
         <div className="mx-auto mt-8 max-w-[720px]">
           <div className="relative overflow-hidden rounded-[var(--radius-card)] border border-[#E3D5BC] bg-white p-6 sm:p-8">
-            {/* Konten — crossfade sederhana via key */}
-            <div key={current.id} className="animate-[fadeIn_250ms_ease-out]">
+            <AnimatePresence mode="wait">
+              <m.div
+                key={current.id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25, ease: [0, 0, 0.2, 1] }}
+              >
               <div className="flex items-center gap-4">
                 <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#DCEDE6] text-[#064E3B]">
                   {current.photoUrl ? (
@@ -96,7 +103,8 @@ export function TestimonialSlider({ testimonials }: Props) {
               <blockquote className="mt-5 text-[17px] italic leading-relaxed text-[#26221B]">
                 “{current.content}”
               </blockquote>
-            </div>
+              </m.div>
+            </AnimatePresence>
           </div>
 
           {/* Dot navigation pill */}

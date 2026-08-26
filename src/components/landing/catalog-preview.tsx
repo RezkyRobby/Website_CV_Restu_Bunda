@@ -1,4 +1,7 @@
+"use client";
+
 import { LinkButton } from "@/components/ui/button";
+import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 
 /**
  * Preview katalog — 3 kartu kandidat placeholder (data sensitif tidak dirender di landing).
@@ -8,7 +11,7 @@ export function CatalogPreview() {
   return (
     <section id="katalog-preview" className="bg-white">
       <div className="mx-auto max-w-[1200px] px-4 py-12 sm:px-6 lg:py-16">
-        <div className="flex flex-wrap items-end justify-between gap-4">
+        <Reveal className="flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
             <p className="text-xs font-semibold uppercase tracking-widest text-[#064E3B]">
               Katalog Kandidat
@@ -26,11 +29,11 @@ export function CatalogPreview() {
           >
             Lihat Semua
           </a>
-        </div>
+        </Reveal>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-3">
+        <Stagger className="mt-8 grid gap-4 sm:grid-cols-3">
           {[1, 2, 3].map((i) => (
-            <div
+            <StaggerItem
               key={i}
               className="overflow-hidden rounded-[var(--radius-card)] border border-[#E3D5BC] bg-[#F8E7C9]/30"
             >
@@ -68,9 +71,9 @@ export function CatalogPreview() {
                   </LinkButton>
                 </div>
               </div>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       </div>
     </section>
   );

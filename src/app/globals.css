@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+	/* ===== DESIGN.md §2 — Colors ===== */
 	--color-champagne-canvas: #f8e7c9;
 	--color-card-surface: #ffffff;
 	--color-warm-sand: #f3ead8;
@@ -10,6 +11,51 @@
 	--color-emerald-ink: #064e3b;
 	--color-emerald-deep: #05382b;
 	--color-emerald-soft: #dcede6;
+	--color-pure-white: #ffffff;
+
+	/* Status — pasangan teks/latar (DESIGN.md §2) */
+	--status-success-fg: #064e3b;
+	--status-success-bg: #dcede6;
+	--status-warning-fg: #8a4b08;
+	--status-warning-bg: #fbeedc;
+	--status-danger-fg: #9c2020;
+	--status-danger-bg: #fae7e6;
+	--status-info-fg: #1e4fbf;
+	--status-info-bg: #e8effc;
+	--status-neutral-fg: #57534e;
+	--status-neutral-bg: #f0eee9;
+
+	/* ===== DESIGN.md §6 — Motion ===== */
+	--duration-fast: 150ms;
+	--duration-base: 250ms;
+	--duration-slow: 400ms;
+	--ease-out: cubic-bezier(0, 0, 0.2, 1);
+
+	/* ===== DESIGN.md §4 — Layout ===== */
+	--page-max-width: 1200px;
+	--section-gap-desktop: 72px;
+	--section-gap-mobile: 48px;
+	--tap-target-min: 44px;
+	--radius-pill: 32px;
+	--radius-card: 16px;
+	--radius-input: 12px;
+
+	/* Pemetaan shadcn/ui — mode terang saja (DESIGN.md §13) */
+	--background: var(--color-champagne-canvas);
+	--card: var(--color-card-surface);
+	--primary: var(--color-emerald-ink);
+	--primary-foreground: var(--color-pure-white);
+	--secondary: var(--color-warm-sand);
+	--secondary-foreground: var(--color-deep-ink);
+	--muted: var(--color-warm-sand);
+	--muted-foreground: var(--color-muted-ink);
+	--accent: var(--color-emerald-soft);
+	--accent-foreground: var(--color-emerald-deep);
+	--destructive: var(--status-danger-fg);
+	--border: var(--color-hairline-border);
+	--input: var(--color-hairline-border);
+	--ring: var(--color-emerald-ink);
+	--foreground: var(--color-deep-ink);
 }
 
 @theme inline {
@@ -22,10 +68,31 @@
 	--color-muted: var(--color-muted-ink);
 	--color-emerald: var(--color-emerald-ink);
 	--color-emerald-deep: var(--color-emerald-deep);
+	--color-emerald-soft: var(--color-emerald-soft);
+
+	--color-success-fg: var(--status-success-fg);
+	--color-success-bg: var(--status-success-bg);
+	--color-warning-fg: var(--status-warning-fg);
+	--color-warning-bg: var(--status-warning-bg);
+	--color-danger-fg: var(--status-danger-fg);
+	--color-danger-bg: var(--status-danger-bg);
+	--color-info-fg: var(--status-info-fg);
+	--color-info-bg: var(--status-info-bg);
+	--color-neutral-fg: var(--status-neutral-fg);
+	--color-neutral-bg: var(--status-neutral-bg);
+
+	/* Tailwind radius tokens */
+	--radius-pill: var(--radius-pill);
+	--radius-card: var(--radius-card);
+	--radius-input: var(--radius-input);
 }
 
 * {
 	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
 }
 
 body {
@@ -33,4 +100,28 @@ body {
 	background: var(--color-champagne-canvas);
 	color: var(--color-deep-ink);
 	font-family: var(--font-plus-jakarta-sans), sans-serif;
+	-webkit-font-smoothing: antialiased;
+}
+
+/* Angka dinamis — tabular-nums (DESIGN.md §3) */
+.tabular-nums {
+	font-variant-numeric: tabular-nums;
+}
+
+/* Fokus keyboard — ring 2px Emerald offset 2px (DESIGN.md §5.11) */
+*:focus-visible {
+	outline: 2px solid var(--color-emerald-ink);
+	outline-offset: 2px;
+}
+
+/* Hormati prefers-reduced-motion (PRD §6.1) */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
 }

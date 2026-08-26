@@ -10,7 +10,7 @@ Seluruh komunikasi, komentar kode, commit message, teks UI, konten email, dan is
 
 1. `PRD.md` — spesifikasi fitur, skema database, alur bisnis, lampiran teknis.
 2. `CONTEXT.md` — glosarium domain. Gunakan istilah di sana persis: **Majikan** (bukan customer), **Kandidat** (pekerja `STANDBY` di katalog publik), **Kuota Tukar** (`maxReplacements` − `replacementsUsed`), **Renewal** (kontrak baru via `renewedFromContractId`, bukan extension). Istilah yang salah akan menyesatkan pembaca kode berikutnya.
-3. `DESIGN.md` — sumber kebenaran desain visual (warna, tipografi, ilustrasi). Belum ada saat dokumen ini ditulis; halaman publik **tidak boleh dikerjakan** sebelum file ini tersedia. Halaman internal (portal, admin) boleh pakai komponen shadcn/ui standar sambil menunggu.
+3. `DESIGN.md` — sumber kebenaran desain visual (warna, tipografi, ilustrasi). **Tersedia dan disetujui** — halaman publik wajib mengikuti token di file ini. Halaman internal (portal, admin) boleh pakai komponen shadcn/ui standar.
 4. `AGENTS.md` (file ini) — aturan main pengerjaan.
 
 ## Tech Stack (Wajib)
@@ -167,7 +167,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 - [x] 6. Seeder idempoten Super Admin via API Better-Auth + seed 12 skill Lampiran B
 - [x] 7. Integrasi Cloudinary (upload, validasi tipe/ukuran, signed delivery URL + overlay watermark) dan Nodemailer Gmail SMTP
 - [ ] 8. Motion foundation (`MotionConfig` + `LazyMotion` + token fast/base/slow) dan kamus label enum terpusat di `src/messages/`
-- [ ] 9. Landing page: hero, statistik real-time dengan fallback, slider testimoni `isPublished` (menunggu `DESIGN.md` tersedia)
+- [ ] 9. Landing page: hero, statistik real-time dengan fallback, slider testimoni `isPublished` (DESIGN.md tersedia — siap dikerjakan)
 - [ ] 10. Katalog publik tersanitasi + filter (kategori, toleransi hewan, kesediaan luar kota) + CTA WhatsApp booking
 - [ ] 11. Profil perusahaan, legalitas, dan prosedur penempatan resmi
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { MotionProvider } from "@/components/motion";
+import { OverlayScrollbar } from "@/components/overlay-scrollbar";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -17,7 +18,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="id">
       <body className={plusJakartaSans.variable}>
-        <MotionProvider>{children}</MotionProvider>
+        <MotionProvider>
+          <OverlayScrollbar>{children}</OverlayScrollbar>
+        </MotionProvider>
       </body>
     </html>
   );

@@ -125,3 +125,11 @@ body {
 		scroll-behavior: auto !important;
 	}
 }
+
+/* Overlayscrollbars — tema Emerald custom (native scrollbar diganti div overlay) */
+.os-scrollbar {
+  --os-size: 6px;
+  --os-handle-bg: rgba(6, 78, 59, 0.35);
+  --os-handle-bg-hover: #064e3b;
+  --os-handle-bg-active: #05382b;
+}

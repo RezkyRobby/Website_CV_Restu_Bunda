@@ -52,23 +52,23 @@ export function CtaBand() {
               <p className="font-semibold text-white">Navigasi</p>
               <ul className="mt-2 space-y-1.5 text-white/70">
                 <li>
-                  <a href="#layanan" className="hover:text-white hover:underline">
-                    Layanan
-                  </a>
-                </li>
-                <li>
-                  <a href="#cara-kerja" className="hover:text-white hover:underline">
-                    Cara Kerja
-                  </a>
-                </li>
-                <li>
-                  <a href="#keamanan" className="hover:text-white hover:underline">
-                    Keamanan
-                  </a>
-                </li>
-                <li>
                   <a href="/katalog" className="hover:text-white hover:underline">
                     Katalog Kandidat
+                  </a>
+                </li>
+                <li>
+                  <a href="/tentang-kami" className="hover:text-white hover:underline">
+                    Tentang Kami
+                  </a>
+                </li>
+                <li>
+                  <a href="/legalitas" className="hover:text-white hover:underline">
+                    Legalitas
+                  </a>
+                </li>
+                <li>
+                  <a href="/prosedur" className="hover:text-white hover:underline">
+                    Prosedur Penempatan
                   </a>
                 </li>
               </ul>

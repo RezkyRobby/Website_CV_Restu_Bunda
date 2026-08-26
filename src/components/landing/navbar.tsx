@@ -1,13 +1,14 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { LinkButton } from "@/components/ui/button";
 
 const NAV_LINKS = [
-  { href: "#layanan", label: "Layanan" },
-  { href: "#cara-kerja", label: "Cara Kerja" },
-  { href: "#keamanan", label: "Keamanan" },
-  { href: "#testimoni", label: "Testimoni" },
+  { href: "/katalog", label: "Katalog" },
+  { href: "/tentang-kami", label: "Tentang Kami" },
+  { href: "/legalitas", label: "Legalitas" },
+  { href: "/prosedur", label: "Prosedur" },
 ];
 
 /**
@@ -22,7 +23,7 @@ export function Navbar() {
     <header className="sticky top-0 z-40 border-b border-[#E3D5BC] bg-[#F8E7C9]/90 backdrop-blur-[8px]">
       <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-6 px-4 sm:px-6">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2 no-underline">
+        <Link href="/" className="flex items-center gap-2 no-underline">
           <span className="flex size-8 items-center justify-center rounded-full bg-[#064E3B] text-sm font-semibold text-white">
             RB
           </span>
@@ -32,7 +33,7 @@ export function Navbar() {
               CV Mariyati
             </span>
           </span>
-        </a>
+        </Link>
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-6 md:flex" aria-label="Navigasi utama">

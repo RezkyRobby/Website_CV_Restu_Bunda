@@ -126,10 +126,39 @@ body {
 	}
 }
 
-/* Overlayscrollbars — tema Emerald custom (native scrollbar diganti div overlay) */
+/* Overlayscrollbars — Emerald overlay: lebih lebar + thumb pendek + muncul hanya dekat tepi */
 .os-scrollbar {
-  --os-size: 6px;
-  --os-handle-bg: rgba(6, 78, 59, 0.35);
+  --os-size: 12px;
+  --os-handle-bg: rgba(6, 78, 59, 0.5);
   --os-handle-bg-hover: #064e3b;
   --os-handle-bg-active: #05382b;
+  --os-handle-min-size: 48px;
+  --os-handle-max-size: 110px;
+  --os-handle-perceived-size: 12px;
+}
+.os-scrollbar-vertical {
+  width: 12px;
+}
+.os-scrollbar-horizontal {
+  height: 12px;
+}
+.os-scrollbar-handle {
+  min-height: 48px;
+  max-height: 110px;
+}
+/* Native track transparan */
+.os-scrollbar-track {
+  background: transparent !important;
+}
+/* Proximity: sembunyi total saat kursor di tengah konten */
+.scroll-root .os-scrollbar {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+}
+.scroll-root.is-near .os-scrollbar,
+.scroll-root .os-scrollbar:hover,
+.scroll-root .os-scrollbar:active {
+  opacity: 1;
+  pointer-events: auto;
 }

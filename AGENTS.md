@@ -169,7 +169,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 - [x] 8. Motion foundation (`MotionConfig` + `LazyMotion` + token fast/base/slow) dan kamus label enum terpusat di `src/messages/`
 - [x] 9. Landing page: hero, statistik real-time dengan fallback, slider testimoni `isPublished` (DESIGN.md tersedia — siap dikerjakan)
 - [x] 10. Katalog publik tersanitasi + filter (kategori, toleransi hewan, kesediaan luar kota) + CTA WhatsApp booking
-- [ ] 11. Profil perusahaan, legalitas, dan prosedur penempatan resmi
+- [x] 11. Profil perusahaan, legalitas, dan prosedur penempatan resmi
 
 ### Fase 2 — Worker Core CRUD (Hari 6–10)
 - [ ] 12. Shell dashboard admin + guard role CS/SUPER_ADMIN + ringkasan metrik (pekerja standby, kontrak aktif)

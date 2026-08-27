@@ -180,7 +180,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 
 ### Fase 3 — Contract & Client Portal (Hari 11–15)
 - [x] 17. Alur deal CS: cek/buat akun majikan by email/telepon + email invite set-password untuk akun baru
-- [ ] 18. Form kontrak: tanggal mulai, durasi bulan (min. 3 + pratinjau endDate), agreedSalary, placementFee, warrantyDays (default 90), maxReplacements (default 2), additional clauses
+- [x] 18. Form kontrak: tanggal mulai, durasi bulan (min. 3 + pratinjau endDate), agreedSalary, placementFee, warrantyDays (default 90), maxReplacements (default 2), additional clauses
 - [ ] 19. Rilis SPK dalam satu transaksi: nomor SPK + contract + worker PLACED + Payment DRAFT otomatis
 - [ ] 20. Generator PDF SPK (@react-pdf/renderer): struktur pasal, pasal pembayaran mencantumkan placementFee, area materai Rp10.000 + unit test struktur pasal
 - [ ] 21. Route Handler proxy `/api/documents/[workerId]/[type]` (validasi sesi + kepemilikan kontrak + signed URL watermark dinamis)

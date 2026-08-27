@@ -276,9 +276,11 @@ model Contract {
   endDate               DateTime       @map("end_date")
   status                ContractStatus @default(ACTIVE)
   agreedSalary          Decimal        @map("agreed_salary") @db.Decimal(12, 2)
+  placementFee          Decimal        @default(0) @map("placement_fee") @db.Decimal(12, 2)
   warrantyDays          Int            @default(90) @map("warranty_days")
   maxReplacements       Int            @default(2) @map("max_replacements")
   replacementsUsed      Int            @default(0) @map("replacements_used")
+  additionalClauses     String?        @map("additional_clauses") @db.Text
   spkDocumentUrl        String?        @map("spk_document_url")
   spkStampedUrl         String?        @map("spk_stamped_url")
   isH30Notified         Boolean        @default(false) @map("is_h30_notified")

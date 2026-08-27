@@ -1,10 +1,12 @@
 // Server logic pekerja — PRD §5.3 #2 & Task 13/14
-// Query katalog internal dan aksi registrasi transaksional.
+// Query katalog internal, upload Cloudinary tervalidasi, dan relasi skills + riwayat majikan.
 
 import { prisma } from "@/lib/prisma";
 import {
   getCloudinaryConfig,
   uploadFileToCloudinary,
+  extractPublicIdsFromUrls,
+  destroyAssets,
 } from "@/lib/cloudinary";
 
 /** Daftar keahlian aktif untuk dipilih di form (vocabulary terkontrol, PRD §7.2). */
@@ -36,6 +38,17 @@ export async function listWorkersAdmin() {
   });
 }
 
+/** Detail dossier pekerja — dipakai halaman detail admin untuk verifikasi relasi. */
+export async function getWorkerDetail(workerId: string) {
+  return prisma.worker.findFirst({
+    where: { id: workerId, deletedAt: null },
+    include: {
+      skills: { include: { skill: true } },
+      experiences: { orderBy: { startDate: "asc" } },
+    },
+  });
+}
+
 /** Helper: cek Cloudinary siap; jika belum, kembalikan null agar pemanggil fallback. */
 export function cloudinaryReady(): boolean {
   return getCloudinaryConfig().isConfigured;
@@ -57,4 +70,20 @@ export async function uploadWorkerFile(
     tags: ["worker", type],
   });
   return result.secureUrl;
+}
+
+/**
+ * Membersihkan arsip yatim di Cloudinary bila transaksi DB gagal.
+ * Mengabaikan error agar tidak menutupi error asal.
+ */
+export async function cleanupUploadedUrls(urls: (string | null)[]): Promise<void> {
+  const ids = extractPublicIdsFromUrls(urls);
+  // Abaikan placeholder pending:*
+  const real = ids.filter((id) => !id.startsWith("pending:"));
+  if (real.length === 0) return;
+  try {
+    await destroyAssets(real);
+  } catch {
+    // Diam — log bisa ditambah bila diperlukan
+  }
 }

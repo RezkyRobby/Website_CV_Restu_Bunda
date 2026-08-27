@@ -68,7 +68,9 @@ export default async function PekerjaListPage({
                 {workers.map((w) => (
                   <tr key={w.id} className="border-b border-[#F0E8D8] last:border-0 hover:bg-[#FFFBF0]">
                     <td className="px-4 py-3">
-                      <p className="font-medium text-[#26221B]">{w.fullName}</p>
+                      <Link href={`/admin/pekerja/${w.id}`} className="font-medium text-[#064E3B] hover:underline">
+                        {w.fullName}
+                      </Link>
                       <p className="text-xs text-[#6F675A]">@{w.nickname} · NIK {w.nik.slice(0, 4)}•••• {w.nik.slice(-4)}</p>
                     </td>
                     <td className="px-4 py-3 text-[#26221B]">{workerCategoryLabels[w.category as never] ?? w.category}</td>

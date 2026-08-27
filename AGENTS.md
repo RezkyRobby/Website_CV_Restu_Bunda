@@ -174,7 +174,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 ### Fase 2 — Worker Core CRUD (Hari 6–10)
 - [x] 12. Shell dashboard admin + guard role CS/SUPER_ADMIN + ringkasan metrik (pekerja standby, kontrak aktif)
 - [x] 13. Form registrasi pekerja multi-step (identitas → keahlian → dokumen/MCU → riwayat majikan → standar gaji → consent) dengan Zod dua lapis
-- [ ] 14. Upload Cloudinary dari form (dokumen sensitif JPG/PNG maks 5 MB, foto profil maks 2 MB) + relasi skills + WorkerExperience
+- [x] 14. Upload Cloudinary dari form (dokumen sensitif JPG/PNG maks 5 MB, foto profil maks 2 MB) + relasi skills + WorkerExperience
 - [ ] 15. CRUD master Skill oleh Super Admin (aktif/nonaktif)
 - [ ] 16. Smart Matching Engine Lampiran A (hard gate kategori + 6 komponen berbobot) + unit test per komponen skor
 

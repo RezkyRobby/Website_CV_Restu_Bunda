@@ -1,6 +1,7 @@
-// Server Actions registrasi pekerja — Task 13
+// Server Actions registrasi pekerja — Task 13/14
 // RBAC ditegakkan di tiap handler (AGENTS.md aturan 2) + validasi dua lapis Zod.
 // Semua penulisan multi-tabel berjalan dalam satu transaksi Prisma.
+// Task 14: upload Cloudinary tervalidasi (foto 2 MB, dokumen 5 MB, JPG/PNG) + relasi skills & WorkerExperience.
 
 "use server";
 
@@ -16,7 +17,7 @@ import {
   step6Schema,
   parseSalaryRupiah,
 } from "@/lib/validators/worker";
-import { uploadWorkerFile } from "@/server/workers";
+import { uploadWorkerFile, cleanupUploadedUrls } from "@/server/workers";
 import { validateSensitiveDocument, validatePhotoProfile } from "@/lib/cloudinary";
 
 // helper sesi admin
@@ -113,18 +114,8 @@ export async function createWorkerAction(formData: FormData): Promise<CreateWork
       return { ok: false, error: "Persetujuan pemrosesan data wajib dicentang (UU PDP)." };
     }
 
-    // Upload ke Cloudinary — sebelum transaksi DB
-    const photoUrl = photoProfile ? await uploadWorkerFile(photoProfile, "photo") : "";
-    const ktpUrl = ktpDocument ? await uploadWorkerFile(ktpDocument, "ktp") : "";
-    const mcuUrl = mcuReport ? await uploadWorkerFile(mcuReport, "mcu") : null;
-    const skckUrl = skckDocument ? await uploadWorkerFile(skckDocument, "skck") : null;
-
-    const expectedSalaryNum = parseSalaryRupiah(String(data.expectedSalary));
-    const trainingCerts = Array.isArray(data.trainingCertificates) ? data.trainingCertificates : [];
-    const experiences = Array.isArray(data.experiences) ? (data.experiences as Array<Record<string, string>>) : [];
+    // Task 14: validasi NIK & skill SEBELUM upload — cegah arsip yatim di Cloudinary
     const skillIds = Array.isArray(data.skillIds) ? (data.skillIds as string[]) : [];
-
-    // Pastikan skillIds valid & aktif
     if (skillIds.length > 0) {
       const found = await prisma.skill.findMany({ where: { id: { in: skillIds }, isActive: true }, select: { id: true } });
       if (found.length !== skillIds.length) {
@@ -132,83 +123,110 @@ export async function createWorkerAction(formData: FormData): Promise<CreateWork
       }
     }
 
-    // Cek NIK duplikat lebih awal (pesan ramah)
     const existingNik = await prisma.worker.findUnique({ where: { nik: s1.data.nik } });
     if (existingNik) {
       return { ok: false, error: "NIK sudah terdaftar. Periksa kembali data pekerja." };
     }
 
+    const expectedSalaryNum = parseSalaryRupiah(String(data.expectedSalary));
+    const trainingCerts = Array.isArray(data.trainingCertificates) ? data.trainingCertificates : [];
+    const experiences = Array.isArray(data.experiences) ? (data.experiences as Array<Record<string, string>>) : [];
     const birthDate = new Date(s1.data.birthDate);
 
-    // Transaksi multi-tabel: worker + skills + experiences + ActivityLog
-    const worker = await prisma.$transaction(async (tx) => {
-      const w = await tx.worker.create({
-        data: {
-          nik: s1.data.nik,
-          noKk: s1.data.noKk || null,
-          fullName: s1.data.fullName,
-          nickname: s1.data.nickname,
-          birthDate,
-          religion: s1.data.religion as never,
-          maritalStatus: s1.data.maritalStatus as never,
-          ethnicity: s1.data.ethnicity,
-          domicileAddress: s1.data.domicileAddress,
-          category: s2.data.category as never,
-          status: "STANDBY",
-          stayIn: s2.data.stayIn,
-          expectedSalary: expectedSalaryNum,
-          petTolerance: s2.data.petTolerance,
-          willingOutOfCity: s2.data.willingOutOfCity,
-          photoProfileUrl: photoUrl,
-          ktpDocumentUrl: ktpUrl,
-          mcuReportUrl: mcuUrl,
-          skckVerified: Boolean(data.skckVerified),
-          skckDocumentUrl: skckUrl,
-          trainingCertificates: trainingCerts.length > 0 ? trainingCerts : undefined,
-          guarantorName: s1.data.guarantorName,
-          guarantorPhone: s1.data.guarantorPhone,
-          guarantorRelation: s1.data.guarantorRelation || null,
-          dataConsentAt: new Date(),
-        },
-      });
+    // Upload ke Cloudinary — setelah semua validasi ringan lolos
+    let photoUrl = "";
+    let ktpUrl = "";
+    let mcuUrl: string | null = null;
+    let skckUrl: string | null = null;
+    try {
+      photoUrl = photoProfile ? await uploadWorkerFile(photoProfile, "photo") : "";
+      ktpUrl = ktpDocument ? await uploadWorkerFile(ktpDocument, "ktp") : "";
+      mcuUrl = mcuReport ? await uploadWorkerFile(mcuReport, "mcu") : null;
+      skckUrl = skckDocument ? await uploadWorkerFile(skckDocument, "skck") : null;
+    } catch (uploadErr) {
+      const msg = uploadErr instanceof Error ? uploadErr.message : "Gagal mengunggah berkas ke penyimpanan.";
+      return { ok: false, error: `Gagal mengunggah berkas: ${msg}` };
+    }
 
-      if (skillIds.length > 0) {
-        await tx.workerSkill.createMany({
-          data: skillIds.map((skillId) => ({ workerId: w.id, skillId })),
-        });
-      }
-
-      for (const exp of experiences) {
-        await tx.workerExperience.create({
+    // Transaksi multi-tabel: worker + skills + experiences + ActivityLog (AGENTS.md aturan 6)
+    let worker: { id: string };
+    try {
+      worker = await prisma.$transaction(async (tx) => {
+        const w = await tx.worker.create({
           data: {
-            workerId: w.id,
-            employerLocation: exp.employerLocation,
-            position: exp.position,
-            startDate: new Date(exp.startDate),
-            endDate: exp.endDate ? new Date(exp.endDate) : null,
-            reasonForLeaving: exp.reasonForLeaving,
+            nik: s1.data.nik,
+            noKk: s1.data.noKk || null,
+            fullName: s1.data.fullName,
+            nickname: s1.data.nickname,
+            birthDate,
+            religion: s1.data.religion as never,
+            maritalStatus: s1.data.maritalStatus as never,
+            ethnicity: s1.data.ethnicity,
+            domicileAddress: s1.data.domicileAddress,
+            category: s2.data.category as never,
+            status: "STANDBY",
+            stayIn: s2.data.stayIn,
+            expectedSalary: expectedSalaryNum,
+            petTolerance: s2.data.petTolerance,
+            willingOutOfCity: s2.data.willingOutOfCity,
+            photoProfileUrl: photoUrl,
+            ktpDocumentUrl: ktpUrl,
+            mcuReportUrl: mcuUrl,
+            skckVerified: Boolean(data.skckVerified),
+            skckDocumentUrl: skckUrl,
+            trainingCertificates: trainingCerts.length > 0 ? trainingCerts : undefined,
+            guarantorName: s1.data.guarantorName,
+            guarantorPhone: s1.data.guarantorPhone,
+            guarantorRelation: s1.data.guarantorRelation || null,
+            dataConsentAt: new Date(),
           },
         });
-      }
 
-      await tx.activityLog.create({
-        data: {
-          userId: admin.id,
-          userRole: admin.role as never,
-          action: "CREATE_WORKER",
-          entityType: "Worker",
-          entityId: w.id,
-          details: { nik: w.nik, fullName: w.fullName },
-        },
+        if (skillIds.length > 0) {
+          await tx.workerSkill.createMany({
+            data: skillIds.map((skillId) => ({ workerId: w.id, skillId })),
+          });
+        }
+
+        for (const exp of experiences) {
+          await tx.workerExperience.create({
+            data: {
+              workerId: w.id,
+              employerLocation: exp.employerLocation,
+              position: exp.position,
+              startDate: new Date(exp.startDate),
+              endDate: exp.endDate ? new Date(exp.endDate) : null,
+              reasonForLeaving: exp.reasonForLeaving,
+            },
+          });
+        }
+
+        await tx.activityLog.create({
+          data: {
+            userId: admin.id,
+            userRole: admin.role as never,
+            action: "CREATE_WORKER",
+            entityType: "Worker",
+            entityId: w.id,
+            details: { nik: w.nik, fullName: w.fullName },
+          },
+        });
+
+        return w;
       });
-
-      return w;
-    });
+    } catch (txErr) {
+      // Transaksi gagal — bersihkan arsip yang sudah terunggah agar tidak yatim
+      await cleanupUploadedUrls([photoUrl, ktpUrl, mcuUrl, skckUrl]);
+      const msg = txErr instanceof Error ? txErr.message : "Gagal menyimpan data pekerja.";
+      if (msg.includes("Unique constraint") || msg.includes("nik")) {
+        return { ok: false, error: "NIK sudah terdaftar." };
+      }
+      return { ok: false, error: msg };
+    }
 
     return { ok: true, workerId: worker.id };
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Terjadi kesalahan sistem.";
-    // Tangani unique constraint NIK
     if (msg.includes("Unique constraint") || msg.includes("nik")) {
       return { ok: false, error: "NIK sudah terdaftar." };
     }

@@ -172,7 +172,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 - [x] 11. Profil perusahaan, legalitas, dan prosedur penempatan resmi
 
 ### Fase 2 — Worker Core CRUD (Hari 6–10)
-- [ ] 12. Shell dashboard admin + guard role CS/SUPER_ADMIN + ringkasan metrik (pekerja standby, kontrak aktif)
+- [x] 12. Shell dashboard admin + guard role CS/SUPER_ADMIN + ringkasan metrik (pekerja standby, kontrak aktif)
 - [ ] 13. Form registrasi pekerja multi-step (identitas → keahlian → dokumen/MCU → riwayat majikan → standar gaji → consent) dengan Zod dua lapis
 - [ ] 14. Upload Cloudinary dari form (dokumen sensitif JPG/PNG maks 5 MB, foto profil maks 2 MB) + relasi skills + WorkerExperience
 - [ ] 15. CRUD master Skill oleh Super Admin (aktif/nonaktif)

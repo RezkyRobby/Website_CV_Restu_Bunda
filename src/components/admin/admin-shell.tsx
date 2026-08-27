@@ -17,6 +17,7 @@ type NavItem = {
 const NAV_ITEMS: NavItem[] = [
   { href: "/admin", label: "Dashboard", icon: "▦" },
   { href: "/admin/pekerja", label: "Pekerja", icon: "☺" },
+  { href: "/admin/majikan", label: "Majikan", icon: "◐" },
   { href: "/admin/kontrak", label: "Kontrak", icon: "▤", disabled: true },
   { href: "/admin/klaim", label: "Klaim Garansi", icon: "◈", disabled: true },
   { href: "/admin/pengaturan", label: "Pengaturan", icon: "⚙" },

@@ -175,7 +175,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 - [x] 12. Shell dashboard admin + guard role CS/SUPER_ADMIN + ringkasan metrik (pekerja standby, kontrak aktif)
 - [x] 13. Form registrasi pekerja multi-step (identitas → keahlian → dokumen/MCU → riwayat majikan → standar gaji → consent) dengan Zod dua lapis
 - [x] 14. Upload Cloudinary dari form (dokumen sensitif JPG/PNG maks 5 MB, foto profil maks 2 MB) + relasi skills + WorkerExperience
-- [ ] 15. CRUD master Skill oleh Super Admin (aktif/nonaktif)
+- [x] 15. CRUD master Skill oleh Super Admin (aktif/nonaktif)
 - [ ] 16. Smart Matching Engine Lampiran A (hard gate kategori + 6 komponen berbobot) + unit test per komponen skor
 
 ### Fase 3 — Contract & Client Portal (Hari 11–15)

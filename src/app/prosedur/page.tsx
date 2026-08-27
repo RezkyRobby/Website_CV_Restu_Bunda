@@ -112,7 +112,7 @@ export default function ProsedurPage() {
             Lihat Katalog Kandidat
           </a>
           <a
-            href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "6280000000000"}?text=${encodeURIComponent("Halo CV Restu Bunda Mariyati, saya ingin bertanya mengenai prosedur penempatan.")}`}
+            href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "6281355702680"}?text=${encodeURIComponent("Halo CV Restu Bunda Mariyati, saya ingin bertanya mengenai prosedur penempatan.")}`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex min-h-[44px] items-center justify-center rounded-[var(--radius-pill)] bg-[#064E3B] px-6 text-sm font-medium text-white hover:bg-[#05382B]"

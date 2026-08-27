@@ -102,8 +102,15 @@ export default function LegalitasPage() {
           <h2 className="text-sm font-semibold text-[#26221B]">Catatan</h2>
           <p className="mt-2 text-sm leading-relaxed text-[#6F675A]">
             Informasi di halaman ini bersifat informatif. Untuk verifikasi legalitas dan permintaan
-            salinan dokumen resmi, silakan hubungi CS melalui WhatsApp. Detail alamat kantor dan
-            jadwal kunjungan akan diinformasikan oleh CS.
+            salinan dokumen resmi, hubungi CS via{" "}
+            <a href="https://wa.me/6281355702680" target="_blank" rel="noopener noreferrer" className="font-medium text-[#064E3B] hover:underline">
+              WhatsApp 0813-5570-2680
+            </a>{" "}
+            atau kunjungi kantor kami di{" "}
+            <a href="https://maps.app.goo.gl/JEDBVHmRNrXJoC5x5" target="_blank" rel="noopener noreferrer" className="font-medium text-[#064E3B] hover:underline">
+              Jl. Mawar No.c3/6, Pai, Biringkanaya, Makassar 90242
+            </a>
+            .
           </p>
         </div>
       </section>

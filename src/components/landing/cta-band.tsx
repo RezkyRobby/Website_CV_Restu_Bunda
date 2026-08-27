@@ -77,11 +77,27 @@ export function CtaBand() {
               </ul>
             </div>
             <div>
-              <p className="font-semibold text-white">Legalitas</p>
+              <p className="font-semibold text-white">Kontak & Alamat</p>
               <p className="mt-2 leading-relaxed text-white/70">
-                Dokumen SPK bermaterai Rp10.000. Seluruh proses penempatan mengikuti prosedur resmi
-                dan ketentuan yang berlaku.
+                <a
+                  href="https://maps.app.goo.gl/JEDBVHmRNrXJoC5x5"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline decoration-white/30 underline-offset-4 hover:text-white hover:decoration-white"
+                >
+                  Jl. Mawar No.c3/6, Pai, Kec. Biringkanaya, Kota Makassar, Sulawesi Selatan 90242
+                </a>
               </p>
+              <p className="mt-2 leading-relaxed text-white/70">
+                <a href="tel:+6281355702680" className="hover:text-white hover:underline">
+                  0813-5570-2680
+                </a>
+                {" · "}
+                <a href="https://wa.me/6281355702680" target="_blank" rel="noopener noreferrer" className="hover:text-white hover:underline">
+                  WhatsApp
+                </a>
+              </p>
+              <p className="mt-2 leading-relaxed text-white/70">Dokumen SPK bermaterai Rp10.000.</p>
               <p className="mt-4 text-xs leading-relaxed text-white/50">
                 © {new Date().getFullYear()} CV Restu Bunda Mariyati. Hak cipta dilindungi.
               </p>
@@ -94,6 +110,6 @@ export function CtaBand() {
 }
 
 function whatsappHref(message: string): string {
-  const number = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "6280000000000";
+  const number = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "6281355702680";
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
 }

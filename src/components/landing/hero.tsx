@@ -74,6 +74,6 @@ export function Hero() {
 }
 
 function whatsappHref(message: string): string {
-  const number = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "6280000000000";
+  const number = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "6281355702680";
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
 }

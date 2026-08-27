@@ -100,13 +100,25 @@ export default function TentangKamiPage() {
           </div>
           <div className="rounded-[var(--radius-card)] border border-[#E3D5BC] bg-white p-6 sm:p-8">
             <h2 className="text-lg font-semibold text-[#26221B]">Alamat Kantor</h2>
-            <p className="mt-3 text-sm leading-relaxed text-[#6F675A]">
-              Kantor operasional CV Restu Bunda Mariyati berlokasi di wilayah layanan penempatan.
-              Alamat lengkap, jam operasional, dan kontak WhatsApp tersedia melalui CS setelah
-              konsultasi awal. Hubungi kami via WhatsApp untuk informasi alamat dan jadwal kunjungan.
+            <address className="mt-3 text-sm not-italic leading-relaxed text-[#26221B]">
+              <a
+                href="https://maps.app.goo.gl/JEDBVHmRNrXJoC5x5"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-[#064E3B] underline-offset-4 hover:underline"
+              >
+                Jl. Mawar No.c3/6, Pai, Kec. Biringkanaya, Kota Makassar, Sulawesi Selatan 90242
+              </a>
+              <span className="mt-1 block text-[#6F675A]">Buka di Google Maps untuk rute & jadwal kunjungan.</span>
+            </address>
+            <p className="mt-2 text-sm leading-relaxed text-[#6F675A]">
+              <a href="tel:+6281355702680" className="font-medium text-[#064E3B] hover:underline">
+                0813-5570-2680
+              </a>
+              <span className="text-[#6F675A]"> · Hubungi CS untuk konfirmasi kunjungan.</span>
             </p>
             <a
-              href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "6280000000000"}?text=${encodeURIComponent("Halo CV Restu Bunda Mariyati, saya ingin mengetahui alamat kantor dan jadwal kunjungan.")}`}
+              href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "6281355702680"}?text=${encodeURIComponent("Halo CV Restu Bunda Mariyati, saya ingin mengetahui alamat kantor dan jadwal kunjungan.")}`}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-4 inline-flex min-h-[44px] items-center justify-center rounded-[var(--radius-pill)] bg-[#064E3B] px-6 text-sm font-medium text-white hover:bg-[#05382B]"

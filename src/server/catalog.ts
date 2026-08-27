@@ -90,7 +90,7 @@ export function calculateAge(birthDate: Date): number {
 }
 
 export function whatsappBookingHref(candidate: { nickname: string; id: string }): string {
-  const number = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "6280000000000";
+  const number = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "6281355702680";
   const message = `Halo CV Restu Bunda Mariyati, saya tertarik memesan kandidat ${candidate.nickname} (ID: ${candidate.id}). Mohon info selengkapnya.`;
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
 }

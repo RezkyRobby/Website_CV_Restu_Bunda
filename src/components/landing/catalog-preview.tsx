@@ -61,7 +61,7 @@ export function CatalogPreview() {
                 </div>
                 <div className="mt-4">
                   <LinkButton
-                    href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "6280000000000"}?text=${encodeURIComponent(`Halo, saya tertarik dengan kandidat ${i}`)}`}
+                    href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "6281355702680"}?text=${encodeURIComponent(`Halo, saya tertarik dengan kandidat ${i}`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     size="md"

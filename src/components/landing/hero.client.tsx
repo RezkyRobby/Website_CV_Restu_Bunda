@@ -6,7 +6,7 @@ import { motionTokens } from "@/components/motion/motion-tokens";
 
 function whatsappHref(message: string): string {
   // NEXT_PUBLIC_ tidak tersedia di build statis tanpa env — fallback aman
-  return `https://wa.me/6280000000000?text=${encodeURIComponent(message)}`;
+  return `https://wa.me/6281355702680?text=${encodeURIComponent(message)}`;
 }
 
 /**

@@ -176,7 +176,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 - [x] 13. Form registrasi pekerja multi-step (identitas → keahlian → dokumen/MCU → riwayat majikan → standar gaji → consent) dengan Zod dua lapis
 - [x] 14. Upload Cloudinary dari form (dokumen sensitif JPG/PNG maks 5 MB, foto profil maks 2 MB) + relasi skills + WorkerExperience
 - [x] 15. CRUD master Skill oleh Super Admin (aktif/nonaktif)
-- [ ] 16. Smart Matching Engine Lampiran A (hard gate kategori + 6 komponen berbobot) + unit test per komponen skor
+- [x] 16. Smart Matching Engine Lampiran A (hard gate kategori + 6 komponen berbobot) + unit test per komponen skor
 
 ### Fase 3 — Contract & Client Portal (Hari 11–15)
 - [ ] 17. Alur deal CS: cek/buat akun majikan by email/telepon + email invite set-password untuk akun baru

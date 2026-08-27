@@ -1,11 +1,12 @@
 // Unit test — service penomoran dokumen (PRD §7.6 & AGENTS.md Aturan 5).
-// Menguji determinisme: format {PREFIX}/{YYYY}/{NNNN}, reset per tahun (zona Asia/Jakarta),
+// Menguji determinisme: format {PREFIX}/{YYYY}/{NNNN}, reset per tahun (zona Asia/Makassar),
 // counter increment, dan format 4 digit angka.
 
 import { describe, expect, it, vi } from "vitest";
 import {
   generateDocumentNumber,
   currentYearJakarta,
+  currentYearMakassar,
   DOCUMENT_PREFIXES,
   type DocumentTransaction,
 } from "@/server/doc-numbering";
@@ -59,13 +60,24 @@ function createMockTx(initialLastValue: number) {
 }
 
 describe("currentYearJakarta", () => {
-  it("mengembalikan tahun kalender Asia/Jakarta (UTC+7)", () => {
-    // Waktu 31 Des 2025 23:30 UTC = 01 Jan 2026 06:30 WIB → seharusnya 2026.
+  it("mengembalikan tahun kalender Asia/Makassar (UTC+8) — alias kompatibilitas", () => {
+    // Waktu 31 Des 2025 23:30 UTC = 01 Jan 2026 07:30 WITA → seharusnya 2026.
     const endOfYearUtc = new Date("2025-12-31T23:30:00Z");
     expect(currentYearJakarta(endOfYearUtc)).toBe(2026);
+    expect(currentYearMakassar(endOfYearUtc)).toBe(2026);
 
-    // Siang 1 Jul 2026 UTC = siang 1 Jul 2026 WIB.
+    // Siang 1 Jul 2026 UTC = siang 1 Jul 2026 WITA.
     expect(currentYearJakarta(new Date("2026-07-01T12:00:00Z"))).toBe(2026);
+  });
+});
+
+describe("currentYearMakassar", () => {
+  it("mengembalikan tahun kalender Asia/Makassar (UTC+8, WITA)", () => {
+    // 31 Des 2025 15:30 UTC = 31 Des 2025 23:30 WITA → masih 2025.
+    expect(currentYearMakassar(new Date("2025-12-31T15:30:00Z"))).toBe(2025);
+    // 31 Des 2025 16:00 UTC = 01 Jan 2026 00:00 WITA → sudah 2026.
+    expect(currentYearMakassar(new Date("2025-12-31T16:00:00Z"))).toBe(2026);
+    expect(currentYearMakassar(new Date("2026-07-01T12:00:00Z"))).toBe(2026);
   });
 });
 
@@ -98,7 +110,7 @@ describe("generateDocumentNumber", () => {
     expect(result).toBe("INV/2026/0008");
   });
 
-  it("mereset per tahun berdasarkan zona Asia/Jakarta", async () => {
+  it("mereset per tahun berdasarkan zona Asia/Makassar", async () => {
     const { mockTx } = createMockTx(0);
     const y2026 = await generateDocumentNumber(mockTx, "SPK", new Date("2026-03-01T00:00:00Z"));
     // Simulasikan transaksi terpisah pada tahun berikutnya (store baru) → reset ke 0001.

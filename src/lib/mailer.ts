@@ -216,7 +216,7 @@ function formatTanggalIndonesia(date: Date): string {
     day: "numeric",
     month: "long",
     year: "numeric",
-    timeZone: "Asia/Jakarta",
+    timeZone: "Asia/Makassar",
   }).format(date);
 }
 
@@ -234,7 +234,7 @@ export async function sendContractReminderEmail(params: ContractReminderParams):
     <p style="margin:0 0 12px 0;">Yth. Bapak/Ibu <strong>${escapeHtml(params.clientName)}</strong>,</p>
     <p style="margin:0 0 12px 0;">Kami mengingatkan bahwa kontrak penempatan <strong>${escapeHtml(params.contractNumber)}</strong> untuk pekerja <strong>${escapeHtml(params.workerNickname)}</strong> akan berakhir pada <strong>${escapeHtml(tanggalSelesai)}</strong> — tersisa <strong>${daysRemaining} hari</strong> lagi.</p>
     <p style="margin:0 0 12px 0;">Silakan hubungi CS kami bila Bapak/Ibu berkenan memperpanjang kontrak, atau bila ada penyesuaian yang diperlukan. Perpanjangan akan diproses sebagai kontrak baru dengan nomor SPK baru; kontrak saat ini tetap berlaku hingga tanggal selesai.</p>
-    <p style="margin:0 0 12px 0;font-size:13px;color:#6b6b6b;">Tanggal selesai kontrak: <strong>${escapeHtml(tanggalSelesai)}</strong> (zona Asia/Jakarta). Pesan ini hanya dikirim satu kali untuk tonggak H-${daysRemaining}.</p>
+    <p style="margin:0 0 12px 0;font-size:13px;color:#6b6b6b;">Tanggal selesai kontrak: <strong>${escapeHtml(tanggalSelesai)}</strong> (zona Asia/Makassar). Pesan ini hanya dikirim satu kali untuk tonggak H-${daysRemaining}.</p>
   `;
 
   await sendMail({

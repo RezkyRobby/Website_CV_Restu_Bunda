@@ -1,7 +1,7 @@
 // Service penomoran dokumen — PRD §7.6 & AGENTS.md Aturan 5.
 //
 // Format: {PREFIX}/{YYYY}/{NNNN} — contoh SPK/2026/0001, CLM/2026/0001, INV/2026/0001.
-// Sequence reset per tahun (berdasarkan zona Asia/Jakarta, bukan jam server),
+// Sequence reset per tahun (berdasarkan zona Asia/Makassar, bukan jam server),
 // dan digenerate DI DALAM transaksi database dengan row lock (SELECT ... FOR UPDATE)
 // agar bebas race condition saat dua CS merilis dokumen bersamaan.
 
@@ -39,14 +39,17 @@ function padSequence(value: number): string {
 }
 
 /**
- * Tahun kalender dalam zona Asia/Jakarta (UTC+7).
+ * Tahun kalender dalam zona Asia/Makassar (UTC+8, WITA).
  * Prisma mengirim DateTime sebagai UTC; angka tahun dihitung manual
  * agar tidak bergantung pada timezone jam server.
  */
-export function currentYearJakarta(now: Date = new Date()): number {
-  const jakartaOffsetMs = 7 * 60 * 60 * 1000;
-  return new Date(now.getTime() + jakartaOffsetMs).getUTCFullYear();
+export function currentYearMakassar(now: Date = new Date()): number {
+  const makassarOffsetMs = 8 * 60 * 60 * 1000;
+  return new Date(now.getTime() + makassarOffsetMs).getUTCFullYear();
 }
+
+/** Alias kompatibilitas — delegasi ke zona Makassar. */
+export const currentYearJakarta = currentYearMakassar;
 
 /**
  * Menghasilkan nomor dokumen berikutnya untuk prefix tertentu di dalam
@@ -60,7 +63,7 @@ export async function generateDocumentNumber(
   prefix: DocumentPrefixKey,
   now: Date = new Date()
 ): Promise<string> {
-  const year = currentYearJakarta(now);
+  const year = currentYearMakassar(now);
 
   // Ambil baris counter untuk (prefix, year). WHERE ... FOR UPDATE mengunci
   // baris bila sudah ada; `upsert` + callback mengamankan baris baru.

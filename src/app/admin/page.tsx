@@ -67,7 +67,7 @@ export default async function AdminDashboardPage() {
             {metrics.lastJobRun.errorMessage
               ? ` — ${metrics.lastJobRun.errorMessage}`
               : ""}
-            . Periksa log server dan jadwal cron (01:00 UTC / 08:00 WIB).
+            . Periksa log server dan jadwal cron (01:00 UTC / 09:00 WITA).
           </p>
         </div>
       )}
@@ -117,7 +117,7 @@ export default async function AdminDashboardPage() {
             Daily Automation Job
           </h2>
           <p className="mt-1 text-xs leading-relaxed text-[#6F675A]">
-            Cron 01:00 UTC (08:00 WIB) — email H-30/H-14/H-7, transisi status
+            Cron 01:00 UTC (09:00 WITA) — email H-30/H-14/H-7, transisi status
             kontrak, dan purge retensi. Satu baris JobRun per eksekusi.
           </p>
 
@@ -327,10 +327,10 @@ export default async function AdminDashboardPage() {
   );
 }
 
-function formatWib(d: Date): string {
+function formatWita(d: Date): string {
   try {
     return new Intl.DateTimeFormat("id-ID", {
-      timeZone: "Asia/Jakarta",
+      timeZone: "Asia/Makassar",
       dateStyle: "medium",
       timeStyle: "short",
     }).format(d);
@@ -339,10 +339,13 @@ function formatWib(d: Date): string {
   }
 }
 
+/** Alias kompatibilitas — delegasi ke zona Makassar. */
+const formatWib = formatWita;
+
 function formatTanggal(d: Date): string {
   try {
     return new Intl.DateTimeFormat("id-ID", {
-      timeZone: "Asia/Jakarta",
+      timeZone: "Asia/Makassar",
       dateStyle: "medium",
     }).format(d);
   } catch {
@@ -351,11 +354,11 @@ function formatTanggal(d: Date): string {
 }
 
 function sisaHari(endDate: Date): string {
-  const nowWib = new Date(
-    new Date().toLocaleString("en-US", { timeZone: "Asia/Jakarta" }),
+  const nowWita = new Date(
+    new Date().toLocaleString("en-US", { timeZone: "Asia/Makassar" }),
   );
   const end = new Date(endDate);
-  const diffMs = end.getTime() - nowWib.getTime();
+  const diffMs = end.getTime() - nowWita.getTime();
   const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
   if (diffDays < 0) return `lewat ${Math.abs(diffDays)} hari`;
   if (diffDays === 0) return "berakhir hari ini";

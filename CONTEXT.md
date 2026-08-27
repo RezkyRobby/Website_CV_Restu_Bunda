@@ -97,5 +97,5 @@ Soft delete menandai `deletedAt`; purge menghapus permanen record + asset Cloudi
 _Avoid_: hard delete (istilah UI saja), hapus (ambigu)
 
 **Job Harian**:
-Satu automation Vercel Cron (08:00 WIB) yang menjalankan: email H-30/H-14/H-7, transisi status kontrak, auto-complete, dan purge retensi.
+Satu automation Vercel Cron (09:00 WITA) yang menjalankan: email H-30/H-14/H-7, transisi status kontrak, auto-complete, dan purge retensi.
 _Avoid_: cron email (hanya subset)

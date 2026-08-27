@@ -456,7 +456,7 @@ model JobRun {
 model DocumentSequence {
   id        String @id @default(cuid())
   prefix    String @map("prefix")   // "SPK" | "CLM" | "INV"
-  year      Int                     // Tahun kalender (zona Asia/Jakarta)
+  year      Int                     // Tahun kalender (zona Asia/Makassar)
   lastValue Int    @default(0) @map("last_value") // Counter terakhir terpakai
 
   @@unique([prefix, year])

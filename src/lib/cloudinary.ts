@@ -277,19 +277,22 @@ export async function uploadFileToCloudinary(
 // lalu meneruskan signed URL dengan text-overlay watermark.
 // ============================================================
 
-/** Format tanggal Indonesia (DD/MM/YYYY) pada zona Asia/Jakarta. */
-export function formatTanggalJakarta(date: Date = new Date()): string {
+/** Format tanggal Indonesia (DD/MM/YYYY) pada zona Asia/Makassar. */
+export function formatTanggalMakassar(date: Date = new Date()): string {
   return new Intl.DateTimeFormat("id-ID", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
-    timeZone: "Asia/Jakarta",
+    timeZone: "Asia/Makassar",
   }).format(date);
 }
 
+/** Alias kompatibilitas — delegasi ke zona Makassar. */
+export const formatTanggalJakarta = formatTanggalMakassar;
+
 /** Teks watermark dinamis sesuai PRD §5.4. */
 export function buildWatermarkText(date: Date = new Date()): string {
-  return `DOKUMEN RESMI - HANYA UNTUK PENEMPATAN ${formatTanggalJakarta(date)}`;
+  return `DOKUMEN RESMI - HANYA UNTUK PENEMPATAN ${formatTanggalMakassar(date)}`;
 }
 
 /**

@@ -25,7 +25,7 @@ Pelanggaran aturan ini adalah bug meskipun fitur jalan:
 
 1. **Data sensitif tidak pernah keluar lewat URL mentah.** KTP, KK, MCU, SKCK hanya diakses via Route Handler proxy `/api/documents/[workerId]/[type]` yang memvalidasi sesi + kepemilikan kontrak, lalu meneruskan signed delivery URL Cloudinary dengan text-overlay watermark dinamis. Dokumen sensitif wajib JPG/PNG maks 5 MB (tanpa PDF) agar satu pipeline watermark seragam; foto profil JPG/PNG maks 2 MB.
 2. **RBAC ditegakkan di middleware dan di setiap Route Handler / Server Action.** `CLIENT` hanya melihat data kontrak miliknya sendiri. `CS` tanpa akses finansial utuh (lihat invoice, tapi bukan laporan omzet). Hapus permanen (purge) hanya Super Admin.
-3. **Zona waktu Asia/Jakarta untuk semua logika tanggal**: garansi, H-30/H-14/H-7, `EXPIRING_SOON`, auto-`COMPLETED`, purge. Cron berjalan UTC (01:00 UTC = 08:00 WIB); konversi terjadi di kode, bukan diasumsikan dari jam server.
+3. **Zona waktu Asia/Makassar untuk semua logika tanggal**: garansi, H-30/H-14/H-7, `EXPIRING_SOON`, auto-`COMPLETED`, purge. Cron berjalan UTC (01:00 UTC = 09:00 WITA); konversi terjadi di kode, bukan diasumsikan dari jam server.
 4. **Satu Daily Automation Job**, tiga tugas berurutan: email pengingat (flag per milestone, query kondisional *catch-up* tanpa duplikasi), transisi status kontrak + pekerja kembali `STANDBY`, purge retensi 2 tahun (hapus record + asset Cloudinary, satu `ActivityLog` `PURGE_WORKER` per pekerja). Setiap eksekusi mencatat satu baris `JobRun`.
 5. **Penomoran dokumen** `{PREFIX}/{YYYY}/{NNNN}` (`SPK/2026/0001`, `CLM/2026/0001`, `INV/2026/0001`): sequence reset per tahun, digenerate **di dalam transaksi database** dengan counter + lock agar bebas race condition antar CS.
 6. **Semua operasi tulis multi-tabel dalam transaksi Prisma** — contoh: rilis SPK (kontrak + status pekerja + invoice DRAFT + nomor SPK), replacement ACCEPTED (terminate kontrak lama + kuota tukar + draft kontrak baru).
@@ -194,7 +194,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 - [ ] 27. Respons offer majikan: ACCEPTED memicu transaksi replacement (kontrak TERMINATED + replacementsUsed + draft kontrak prefill criteria); RESOLVED/REJECTED membatalkan offer PENDING lain
 - [ ] 28. Finalisasi kontrak pengganti oleh CS + rilis SPK baru (invoice REPLACEMENT_FEE bila ada biaya)
 - [ ] 29. Flow renewal: kontrak baru dengan flag fresh + renewedFromContractId, kontrak lama COMPLETED
-- [ ] 30. Daily Automation Job (cron 01:00 UTC, logika Asia/Jakarta): email H-30/H-14/H-7 catch-up, transisi EXPIRING_SOON/COMPLETED + pekerja STANDBY, purge retensi 2 tahun + ActivityLog PURGE_WORKER, pencatatan JobRun + alert dashboard
+- [ ] 30. Daily Automation Job (cron 01:00 UTC, logika Asia/Makassar): email H-30/H-14/H-7 catch-up, transisi EXPIRING_SOON/COMPLETED + pekerja STANDBY, purge retensi 2 tahun + ActivityLog PURGE_WORKER, pencatatan JobRun + alert dashboard
 - [ ] 31. E2E test alur klaim garansi PRD §8.5
 
 ### Fase 5 — Security Audit & Launch (Hari 19–20)
